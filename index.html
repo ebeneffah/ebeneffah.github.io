@@ -1,1 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Your Name</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink:      #0d0d0d;
+      --paper:    #f5f0e8;
+      --cream:    #ede8dc;
+      --accent:   #c8410a;
+      --muted:    #7a7065;
+      --rule:     #c5bfb4;
+      --serif:    'Playfair Display', Georgia, serif;
+      --mono:     'DM Mono', 'Courier New', monospace;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── HEADER / MASTHEAD ── */
+    header {
+      border-bottom: 2px solid var(--ink);
+      padding: 1.2rem 0 0.6rem;
+    }
+
+    .masthead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .issue-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .masthead-name {
+      text-align: center;
+      padding: 2.5rem 0 1.8rem;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+    }
+
+    .masthead-name::before,
+    .masthead-name::after {
+      content: '◆';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      color: var(--accent);
+    }
+    .masthead-name::before { left: 0; }
+    .masthead-name::after  { right: 0; }
+
+    .display-name {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .display-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .tagline {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.8rem;
+      animation: fadeUp 0.9s 0.15s ease both;
+    }
+
+    /* ── HERO COLUMNS ── */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 2px 1fr;
+      gap: 0 2rem;
+      padding: 3rem 0 2.5rem;
+      border-bottom: 1px solid var(--rule);
+      animation: fadeUp 0.9s 0.3s ease both;
+    }
+
+    .col-rule {
+      background: var(--rule);
+    }
+
+    .hero-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-bio {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      line-height: 1.65;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .hero-bio .placeholder {
+      background: var(--cream);
+      border-radius: 2px;
+      padding: 0 3px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .contact-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-item .c-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .contact-item a {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      transition: color 0.2s, border-color 0.2s;
+      width: fit-content;
+    }
+
+    .contact-item a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      font-style: italic;
+      white-space: nowrap;
+    }
+
+    .section-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── PROJECTS ── */
+    #projects {
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      animation: fadeUp 0.9s 0.45s ease both;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--rule);
+      border: 1.5px solid var(--rule);
+    }
+
+    .project-card {
+      background: var(--paper);
+      padding: 1.8rem;
+      transition: background 0.2s;
+      cursor: default;
+      position: relative;
+    }
+
+    .project-card:hover {
+      background: var(--cream);
+    }
+
+    .project-card:hover .project-arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent);
+    }
+
+    .project-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.7rem;
+    }
+
+    .project-num {
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+    }
+
+    .project-arrow {
+      font-size: 1rem;
+      color: var(--muted);
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .project-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+    }
+
+    .project-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.2rem;
+    }
+
+    .tag {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--rule);
+      padding: 2px 8px;
+      color: var(--muted);
+    }
+
+    .project-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ── RESUME ── */
+    #resume {
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      animation: fadeUp 0.9s 0.6s ease both;
+    }
+
+    .resume-inner {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .resume-text {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .resume-text p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      max-width: 420px;
+    }
+
+    .resume-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--paper);
+      background: var(--ink);
+      padding: 0.9rem 2rem;
+      text-decoration: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .resume-cta:hover {
+      background: var(--accent);
+    }
+
+    .resume-cta span {
+      font-size: 1.2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-name {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .col-rule { display: none; }
+      .masthead-name::before,
+      .masthead-name::after { display: none; }
+      .resume-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="masthead-top">
+      <span class="issue-tag">Portfolio · <span id="current-year"></span></span>
+      <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#resume">Résumé</a></li>
+        <li><a href="mailto:your@email.com">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="masthead-name">
+      <!-- ✏️ Replace with your name below -->
+      <h1 class="display-name">Your <em>Name</em></h1>
+      <!-- ✏️ Replace with your title / one-line descriptor -->
+      <p class="tagline">Designer · Developer · Creator</p>
+    </div>
+  </header>
+
+  <!-- ── HERO BIO + CONTACT ── -->
+  <section class="hero-grid">
+    <div>
+      <p class="hero-label">About</p>
+      <!-- ✏️ Replace the placeholder text below with your bio -->
+      <p class="hero-bio">
+        <span class="placeholder">[ Write 2–3 sentences about yourself here. What you do, what you care about, and what makes your work distinct. Keep it personal and genuine. ]</span>
+      </p>
+    </div>
+
+    <div class="col-rule"></div>
+
+    <div class="contact-block">
+      <div class="contact-item">
+        <span class="c-label">Email</span>
+        <!-- ✏️ Replace with your email -->
+        <a href="mailto:your@email.com">your@email.com</a>
+      </div>
+      <div class="contact-item">
+        <span class="c-label">LinkedIn</span>
+        <!-- ✏️ Replace with your LinkedIn URL and handle -->
+        <a href="https://linkedin.com/in/yourhandle" target="_blank" rel="noopener">linkedin.com/in/yourhandle</a>
+      </div>
+      <div class="contact-item">
+        <span class="c-label">Location</span>
+        <!-- ✏️ Replace with your city -->
+        <span style="font-family:var(--serif);font-style:italic;font-size:1.05rem;">Your City, State</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="projects">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Selected Work</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- ✏️ Project 1 — duplicate this block to add more -->
+      <a class="project-link" href="#" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-top">
+            <span class="project-num">№ 01</span>
+            <span class="project-arrow">↗</span>
+          </div>
+          <h3 class="project-title">Project Title One</h3>
+          <p class="project-desc">A brief description of what this project is, what problem it solves, and what role you played in building it.</p>
+          <div class="project-tags">
+            <span class="tag">Tag One</span>
+            <span class="tag">Tag Two</span>
+            <span class="tag">Tag Three</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ✏️ Project 2 -->
+      <a class="project-link" href="#" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-top">
+            <span class="project-num">№ 02</span>
+            <span class="project-arrow">↗</span>
+          </div>
+          <h3 class="project-title">Project Title Two</h3>
+          <p class="project-desc">A brief description of what this project is, what problem it solves, and what role you played in building it.</p>
+          <div class="project-tags">
+            <span class="tag">Tag One</span>
+            <span class="tag">Tag Two</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- ✏️ Project 3 -->
+      <a class="project-link" href="#" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-top">
+            <span class="project-num">№ 03</span>
+            <span class="project-arrow">↗</span>
+          </div>
+          <h3 class="project-title">Project Title Three</h3>
+          <p class="project-desc">A brief description of what this project is, what problem it solves, and what role you played in building it.</p>
+          <div class="project-tags">
+            <span class="tag">Tag One</span>
+            <span class="tag">Tag Two</span>
+            <span class="tag">Tag Three</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── RÉSUMÉ ── -->
+  <section id="resume">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Résumé</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="resume-inner">
+      <div class="resume-text">
+        <!-- ✏️ Optionally customize this copy -->
+        <p>My full résumé details my experience, education, and skills. Available as a PDF for your convenience.</p>
+      </div>
+      <!-- ✏️ Replace href with your résumé URL or file path -->
+      <a class="resume-cta" href="resume.pdf" target="_blank" rel="noopener">
+        <span>↓</span> Download Résumé
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <!-- ✏️ Replace with your name -->
+    <span class="footer-name">Your Name</span>
+    <span class="footer-copy">Built by hand · <span id="footer-year"></span></span>
+  </footer>
+
+</div>
+
+<script>
+  // Auto-fill the current year
+  const yr = new Date().getFullYear();
+  document.getElementById('current-year').textContent = yr;
+  document.getElementById('footer-year').textContent = yr;
+</script>
+
+</body>
+</html>
