@@ -380,19 +380,6 @@
   transform: scale(1.05);
 }
 
-/* ── CURSOR TRAIL ── */
-.cursor-dot {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.3s ease;
-}
   </style>
 </head>
 <body>
@@ -607,35 +594,6 @@
     });
   }, { threshold: 0.12 });
   revealEls.forEach(el => observer.observe(el));
-
-  // ── CURSOR TRAIL ──
-  const dots = [];
-  const numDots = 8;
-  for (let d = 0; d < numDots; d++) {
-    const dot = document.createElement('div');
-    dot.classList.add('cursor-dot');
-    document.body.appendChild(dot);
-    dots.push({ el: dot, x: 0, y: 0 });
-  }
-  let mouseX = 0, mouseY = 0;
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-  function animateTrail() {
-    dots.forEach((dot, index) => {
-      const prev = dots[index - 1] || { x: mouseX, y: mouseY };
-      dot.x += (prev.x - dot.x) * 0.35;
-      dot.y += (prev.y - dot.y) * 0.35;
-      dot.el.style.left = dot.x + 'px';
-      dot.el.style.top  = dot.y + 'px';
-      dot.el.style.opacity = (1 - index / numDots) * 0.5;
-      dot.el.style.width  = (8 - index * 0.7) + 'px';
-      dot.el.style.height = (8 - index * 0.7) + 'px';
-    });
-    requestAnimationFrame(animateTrail);
-  }
-  animateTrail();
 
   // ── CARD TILT ──
   document.querySelectorAll('.project-card').forEach(card => {
